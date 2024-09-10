@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+
     - name: Login to Scaleway Container Registry
       uses: docker/login-action@v3
       with:
@@ -21,13 +22,13 @@ jobs:
     - name: Build the webserver Docker image
       run: docker build . -t ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/groupe-2/webserver:latest
 
-    - name: Push the webserver Docker image to scaleway
+    - name: Push the webserver Docker image to Scaleway
       run: docker push ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/groupe-2/webserver:latest
 
     - name: Build the scheduler Docker image
       run: docker build . -t ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/groupe-2/scheduler:latest
 
-    - name: Push the scheduler Docker image to scaleway
+    - name: Push the scheduler Docker image to Scaleway
       run: docker push ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/groupe-2/scheduler:latest
 
 
@@ -42,7 +43,7 @@ jobs:
         username: ${{ secrets.SCALEWAY_USER }}
         key: ${{ secrets.SCALEWAY_SSH_KEY }}
         port: 22
-        source: "./"
+        source: "./docker-compose.yml"   # Spécifiez uniquement le fichier docker-compose.yml
         target: "/home/moise"
 
     - name: Deploy to server
@@ -54,13 +55,9 @@ jobs:
         port: 22
         script: |
           cd /home/moise
+          ls  # Vérifie que le fichier docker-compose.yml est bien présent
           docker-compose down || true
           docker-compose rm -f || true
           docker pull ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/groupe-2/webserver:latest
           docker pull ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/groupe-2/scheduler:latest
           docker-compose up -d
-
-
-
-
-

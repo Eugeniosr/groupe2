@@ -25,7 +25,7 @@ jobs:
         host: ${{ secrets.SCALEWAY_HOST }}
         username: ${{ secrets.SCALEWAY_USER }}
         key: ${{ secrets.SCALEWAY_SSH_KEY }}
-        source: "./docker-compose.yml"
+        source: "."
         target: '/home/moise/'
 
     - name: Build the webserver Docker image

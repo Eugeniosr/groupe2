@@ -60,6 +60,7 @@ jobs:
           docker pull ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/groupe-2/webserver:latest
           docker pull ${{ secrets.CONTAINER_REGISTRY_ENDPOINT }}/groupe-2/scheduler:latest
           docker-compose up -d
+          echo 'good job'
 
 
 
